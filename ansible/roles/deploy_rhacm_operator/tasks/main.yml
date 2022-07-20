@@ -326,7 +326,7 @@
   register: k8s_run
   until: k8s_run is not failed
   delay: 10
-  retries: 3
+  retries: 6
 
 - name: Deploy RHACM Observability
   when: enable_rhacm_observability|bool

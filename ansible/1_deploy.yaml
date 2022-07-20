@@ -26,6 +26,7 @@
     deploy_aap2_controller: false
     deploy_rh_sso: false
     deploy_openshift_pipelines: false
+    deploy_nfs_provisioner: false
 
     #########################################
     ## Local Storage Operator Variables
@@ -34,6 +35,21 @@
       - app-1
       - app-2
       - app-3
+
+    #########################################
+    ## NFS Provisioner Variables
+    ## 
+    nfs_server_name: 172.16.20.13
+    nfs_path_name: /volume1/exports/ocpacm
+
+    #########################################
+    ## Storage Class Overrides
+    ## If you want to override the default storage classes used, uncomment the following variables
+    # postgresqlVolumeStorageClass: nfs-client
+    # logging_storageclass: nfs-client
+    # rh_sso_storageclass_name: nfs-client
+    # aap_controller_storageclass_name: nfs-client
+    # gitea_storageclass_name: nfs-client
 
   tasks:
     - name: Check for Helm
@@ -80,6 +96,11 @@
           when: r_ocp_infra.resources[0].status.platform != "AWS"
           include_role:
             name: deploy_lso_operator
+
+    - name: Install NFS Storage Provisioner
+      when: deploy_nfs_provisioner|bool
+      include_role:
+        name: deploy_nfs_provisioner
 
     ## TODO: Add logic for ODF to create a StorageSystem from EBS on AWS
     - name: Install OpenShift Data Foundation

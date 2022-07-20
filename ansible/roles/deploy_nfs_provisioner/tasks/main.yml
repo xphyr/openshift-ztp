@@ -1,0 +1,89 @@
+---
+# tasks file for deploy_nfs_subdir_provisioner
+- name: Fail if nfs_server_name is undefined
+  fail:
+    msg: "nfs_server_name is undefined!"
+  when: nfs_server_name is undefined
+
+- name: Fail if nfs_path_name is undefined
+  fail:
+    msg: "nfs_path_name is undefined!"
+  when: nfs_path_name is undefined
+
+- name: Clear out facts
+  set_fact:
+    operator_csv_version: ""
+    operator_csv_version_index: ""
+    operator_api_definition: ""
+    operator_api_version: ""
+
+- name: Get Cluster Version
+  kubernetes.core.k8s_info:
+    api_version: config.openshift.io/v1
+    kind: ClusterVersion
+    name: version
+  register: r_ocp_version
+
+- name: Set cluster version
+  set_fact:
+    ocp_version: "{{ r_ocp_version.resources[0].status.desired.version  }}"
+
+- name: Debug
+  debug:
+    msg:
+      - "OpenShift Version: {{ ocp_version }}"
+
+- name: Create namespace for {{ nfs_provisioner_namespace }}
+  kubernetes.core.k8s:
+    state: present
+    kind: Namespace
+    api_version: v1
+    merge_type:
+    - strategic-merge
+    - merge
+    definition:
+      metadata:
+        name: "{{ nfs_provisioner_namespace }}"
+      spec: {}
+  register: k8s_run
+  until: k8s_run is not failed
+  delay: 10
+  retries: 3
+
+- name: Create RBAC Roles and Service Account
+  kubernetes.core.k8s:
+    state: present
+    apply: yes
+    definition: "{{ lookup('template', '{{ item }}' ) | from_yaml }}"
+  with_fileglob:
+    - "templates/serviceAccount.yaml.j2"
+    - "templates/clusterRole.yaml.j2"
+    - "templates/clusterRoleBinding.yaml.j2"
+    - "templates/roleLeaderLock.yaml.j2"
+    - "templates/roleBindingLeaderLock.yaml.j2"
+    - "templates/roleAnyuid.yaml.j2"
+    - "templates/roleBindingAnyuid.yaml.j2"
+  register: k8s_run
+  until: k8s_run is not failed
+  delay: 10
+  retries: 3
+
+- name: Create NFS Provisioner Deployment
+  kubernetes.core.k8s:
+    state: present
+    apply: yes
+    definition: "{{ lookup('template', 'templates/nfsdeployment.yaml.j2' ) | from_yaml }}"
+  register: k8s_run
+  until: k8s_run is not failed
+  delay: 10
+  retries: 3
+
+- name: Create StorageClass
+  kubernetes.core.k8s:
+    state: present
+    apply: yes
+    definition: "{{ lookup('file', 'files/class.yml' ) | from_yaml }}"
+  register: k8s_run
+  until: k8s_run is not failed
+  delay: 10
+  retries: 3

@@ -1,0 +1,4 @@
+---
+# defaults file for deploy_nfs_subdir_provisioner
+nfs_provisioner_namespace: nfsprovisioner
+nfs_storage_class_name: nfs

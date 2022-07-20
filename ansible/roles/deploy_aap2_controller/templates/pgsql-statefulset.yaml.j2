@@ -93,7 +93,7 @@ spec:
         resources:
           requests:
             storage: 8Gi
-        storageClassName: ocs-storagecluster-ceph-rbd
+        storageClassName: {{ aap_controller_storageclass_name }}
         volumeMode: Filesystem
         hostPath:
           path: /var/lib/pgsql/data

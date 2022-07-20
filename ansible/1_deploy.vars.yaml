@@ -1,0 +1,44 @@
+#########################################
+## Secrets Management
+deploy_reflector: false
+deploy_sealed_secrets: false # not supported yet
+deploy_hashicorp_vault: false # not supported yet
+
+#########################################
+## Operator Management
+deploy_rh_cert_manager: false
+deploy_openshift_logging: false
+deploy_nfd: false
+deploy_lso: false
+deploy_odf: false
+deploy_http_mirror: false
+deploy_rhacm: true
+deploy_gitea: false
+deploy_rh_gitops: true
+deploy_aap2_controller: true
+deploy_rh_sso: false
+deploy_openshift_pipelines: false
+deploy_nfs_provisioner: true
+
+#########################################
+## Local Storage Operator Variables
+## lso_hostname_targets: is a list of hostnames to be used by the lso-operator for a LocalVolumeSet
+lso_hostname_targets:
+  - app-1
+  - app-2
+  - app-3
+
+#########################################
+## NFS Provisioner Variables
+## 
+nfs_server_name: 172.16.20.13
+nfs_path_name: /volume1/exports/ocpacm
+
+#########################################
+## Storage Class Overrides
+## If you want to override the default storage classes used, uncomment the following variables
+# postgresqlVolumeStorageClass: nfs-client
+# logging_storageclass: nfs-client
+# rh_sso_storageclass_name: nfs-client
+aap_controller_storageclass_name: nfs-client
+# gitea_storageclass_name: nfs-client
