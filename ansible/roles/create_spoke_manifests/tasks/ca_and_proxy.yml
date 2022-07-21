@@ -30,6 +30,7 @@
         - name: Set the Root CA var as a base64 encoded string
           set_fact:
             root_ca_bundle_pem: "{{ r_root_ca_config.resources[0].data['ca-bundle.crt'] | b64encode }}"
+          when: r_cluster_proxy_config.resources[0].spec.trustedCA.name is defined and r_cluster_proxy_config.resources[0].spec.trustedCA.name != ""
 
     # ===============================================================================================
     # Setup Proxy Facts

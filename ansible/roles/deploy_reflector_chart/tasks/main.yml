@@ -18,11 +18,17 @@
         name: "{{ reflector_namespace }}"
       spec: {}
 
+- name: Add a Reflector Project Helm Repo
+  kubernetes.core.helm_repository:
+    name: emberstack
+    repo_url: https://emberstack.github.io/helm-charts
+
 - name: Deploy the latest version of the Reflector Helm Chart
   kubernetes.core.helm:
     name: reflector
     chart_ref: emberstack/reflector
     release_namespace: "{{ reflector_namespace }}"
+    update_repo_cache: True
 
 - name: Add the SCC RoleBinding
   kubernetes.core.k8s:

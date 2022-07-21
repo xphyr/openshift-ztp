@@ -9,6 +9,7 @@ This process is conducted via Red Hat Advanced Cluster Management ([RH]ACM) as a
 - [Red Hat OpenShift Container Platform](https://cloud.redhat.com/products/container-platform)
   - [Local Storage Operator](https://docs.openshift.com/container-platform/4.10/storage/persistent_storage/persistent-storage-local.html)
   - [Red Hat OpenShift Data Foundation](https://www.redhat.com/en/technologies/cloud-computing/openshift-data-foundation)
+  - [NFS Subdir External Provisioner](https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner) - optional
 - [Red Hat Advanced Cluster Management](https://www.redhat.com/en/technologies/management/advanced-cluster-management)
 - [Red Hat Ansible Automation Platform 2.x](https://www.redhat.com/en/technologies/management/ansible)
 - [Red Hat GitOps](https://cloud.redhat.com/blog/announcing-openshift-gitops) (ArgoCD)
@@ -124,6 +125,19 @@ Now you just need to click the ***Sync*** button in RH GitOps!
 From here RH GitOps will pick up the new manifests, apply it to the Hub Cluster, which will use RHACM and AAP2 to deploy a cluster to vSphere automatically.
 
 ---
+
+## AAP2 Subscription requirements
+
+You will need to have a subscription for AAP2
+
+1. Log into [Subscription Management Applications](https://access.redhat.com/management/distributors?type=satellite)
+2. Select "Create New subscription allocation"
+3. Enter a Name and then select "Satellite 6.10" for type
+4. Click Create
+5. Select the "Subscriptions" tab and click Add Subscriptions
+6. Search for "Ansible Automation Platform"
+7. Select a subscription and allocate a minimum of 2 Entitlements and then click "Submit"
+8. Select "Export Manifest" and save the file for use later.
 
 ## Docs & Examples
 

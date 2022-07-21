@@ -1,0 +1,21 @@
+configure_rhacm: true
+configure_aap2_controller: true
+configure_rh_gitops: true
+
+use_ztp_mirror: false
+use_services_not_routes: true
+
+## Path to the OpenShift Pull Secret
+pull_secret_path: /ztpvsphere/rh-ocp-pull-secret.json
+pull_secret: "{{ lookup('file', pull_secret_path) }}"
+
+# git_credential_type: ssh | basic
+scm_credential_type: basic
+scm_credential_username: user-1
+scm_credential_password: openshift
+scm_credential_private_key: /ztpvsphere/id_rsa
+scm_credential_public_key: /ztpvsphere/id_rsa.pub
+scm_repo_name: openshift-ztp
+
+# aap2 subscription file
+subscription_manifest_path: /ztpvsphere/aap2-subscription-manifest.zip

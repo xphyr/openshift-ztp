@@ -82,3 +82,7 @@ node_boot_timeout: 300
 deployment_type: vsphere
 
 install_packages: false
+
+######################################################################################
+## change this to TRUE to use gitea with a selfsignedcert
+git_ssl_no_verify: FALSE
